@@ -43,10 +43,11 @@ scalacOptions := Seq(
 // sbt-doctest leaves some unused values
 // see https://github.com/scala/bug/issues/10270
 scalacOptions in Test := {
-  if (CrossVersion.partialVersion(scalaVersion.value) == Some((2,12)))
+  (if (CrossVersion.partialVersion(scalaVersion.value) == Some((2,12))) {
     scalacOptions.value.filter(!Seq("-Ywarn-value-discard", "-Xlint").contains(_)) :+ "-Xlint:-unused,_"
-  else
+  } else {
     scalacOptions.value
+  }).filter(_  != "-Xfatal-warnings")
 }
 
 dynamoDBLocalDownloadDir := file(".dynamodb-local")
